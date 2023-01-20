@@ -4,6 +4,7 @@ import (
 	"fmt"
 	// "math"
 	// "time"
+	// "unicode/utf8"
 )
 
 // const s string = "constant"
@@ -47,11 +48,146 @@ import (
 
 /*Recursion*/
 
-func fact(n int) int {
-	if n == 0 {
-		return 1
+// func fact(n int) int {
+// 	if n == 0 {
+// 		return 1
+// 	}
+// 	return n * fact(n-1)
+// }
+
+/*Pointers*/
+
+// func zeroval(ival int) {
+// 	ival = 0
+// }
+
+// func zeroptr(iptr *int) {
+// 	*iptr = 0
+// }
+
+/*Strings and Runes*/
+
+// func examineRune(r rune) {
+// 	if r == 't' {
+// 		fmt.Println("found tee")
+// 	} else if r == 'ส' {
+// 		fmt.Println("found so sua")
+// 	}
+// }
+
+/*Structs*/
+
+// type person struct {
+// 	name string
+// 	age  int
+// }
+
+// func newPerson(name string) *person {
+// 	p := person{name: name}
+// 	p.age = 42
+
+// 	return &p
+// }
+
+/*Methods*/
+
+// type rect struct {
+// 	width, height int
+// }
+
+// func (r *rect) area() int {
+// 	return r.width * r.height
+// }
+
+// func (r rect) perim() int {
+// 	return 2*r.width + 2*r.height
+// }
+
+/*Interfaces*/
+
+// type geometry interface {
+// 	area() float64
+// 	perim() float64
+// }
+
+// type rect struct {
+// 	width, height float64
+// }
+
+// type circle struct {
+// 	radius float64
+// }
+
+// func (r rect) area() float64 {
+// 	return r.width * r.height
+// }
+
+// func (r rect) perim() float64 {
+// 	return 2*r.width + 2*r.height
+// }
+
+// func (c circle) area() float64 {
+// 	return math.Pi * c.radius * c.radius
+// }
+
+// func (c circle) perim() float64 {
+// 	return 2 * math.Pi * c.radius
+// }
+
+// func measure(g geometry) {
+// 	fmt.Println(g)
+// 	fmt.Println(g.area())
+// 	fmt.Println(g.perim())
+// }
+
+/*Struct Embedding*/
+
+// type base struct {
+// 	num int
+// }
+
+// func (b base) describe() string {
+// 	return fmt.Sprintf("base with num=%v", b.num)
+// }
+
+// type container struct {
+// 	base
+// 	str string
+// }
+
+/*Generics*/
+
+func MapKeys[K comparable, V any](m map[K]V) []K {
+	r := make([]K, 0, len(m))
+	for k := range m {
+		r = append(r, k)
 	}
-	return n * fact(n-1)
+	return r
+}
+
+type List[T any] struct {
+	head, tail *element[T]
+}
+type element[T any] struct {
+	next *element[T]
+	val  T
+}
+
+func (lst *List[T]) Push(v T) {
+	if lst.tail == nil {
+		lst.head = &element[T]{val: v}
+		lst.tail = lst.head
+	} else {
+		lst.tail.next = &element[T]{val: v}
+		lst.tail = lst.tail.next
+	}
+}
+func (lst *List[T]) GetAll() []T {
+	var elems []T
+	for e := lst.head; e != nil; e = e.next {
+		elems = append(elems, e.val)
+	}
+	return elems
 }
 
 func main() {
@@ -339,16 +475,130 @@ func main() {
 
 	/*Recursion*/
 
-	fmt.Println(fact(7))
+	// fmt.Println(fact(7))
 
-	var fib func(n int) int
+	// var fib func(n int) int
 
-	fib = func(n int) int {
-		if n < 2 {
-			return n
-		}
-		return fib(n-1) + fib(n-2)
-	}
+	// fib = func(n int) int {
+	// 	if n < 2 {
+	// 		return n
+	// 	}
+	// 	return fib(n-1) + fib(n-2)
+	// }
 
-	fmt.Println(fib(7))
+	// fmt.Println(fib(7))
+
+	/*Pointers*/
+
+	// i := 1
+	// fmt.Println("initial:", i)
+
+	// zeroval(i)
+	// fmt.Println("zeroval:", i)
+
+	// zeroptr(&i)
+	// fmt.Println("zeroptr:", i)
+
+	// fmt.Println("pointer:", &i)
+
+	/*Strings and Runes*/
+
+	// const s = "สวัสดี"
+
+	// fmt.Println("Len:", len(s))
+
+	// for i := 0; i < len(s); i++ {
+	// 	fmt.Printf("%x", s[i])
+	// }
+	// fmt.Println()
+
+	// fmt.Println("Rune count:", utf8.RuneCountInString(s))
+
+	// for idx, runeValue := range s {
+	// 	fmt.Printf("%#U starts at  %d\n", runeValue, idx)
+	// }
+
+	// fmt.Println("\nUsing DecodeRuneInString")
+	// for i, w := 0, 0; i < len(s); i += w {
+	// 	runeValue, width := utf8.DecodeRuneInString(s[i:])
+	// 	fmt.Printf("%#U starts at %d\n", runeValue, i)
+	// 	w = width
+
+	// 	examineRune(runeValue)
+	// }
+
+	/*Structs*/
+
+	// fmt.Println(person{"Bob", 20})
+
+	// fmt.Println(person{name: "Alice", age: 30})
+
+	// fmt.Println(person{name: "Fred"})
+
+	// fmt.Println(&person{name: "Ann", age: 40})
+
+	// fmt.Println(newPerson("Jon"))
+
+	// s := person{name: "Sean", age: 50}
+	// fmt.Println(s.name)
+
+	// sp := &s
+	// fmt.Println(sp.age)
+
+	// sp.age = 51
+	// fmt.Println(sp.age)
+
+	/*Methods*/
+
+	// r := rect{width: 10, height: 5}
+
+	// fmt.Println("area: ", r.area())
+	// fmt.Println("perim: ", r.perim())
+
+	// rp := &r
+	// fmt.Println("area: ", rp.area())
+	// fmt.Println("perim: ", rp.perim())
+
+	/*Interfaces*/
+
+	// r := rect{width: 3, height: 4}
+	// c := circle{radius: 5}
+
+	// measure(r)
+	// measure(c)
+
+	/*Struct Embedding*/
+
+	// co := container{
+	// 	base: base{
+	// 		num: 1,
+	// 	},
+	// 	str: "some name",
+	// }
+
+	// fmt.Printf("co={num: %v, str: %v}\n", co.num, co.str)
+
+	// fmt.Println("also num:", co.base.num)
+
+	// fmt.Println("describe:", co.describe())
+
+	// type describer interface {
+	// 	describe() string
+	// }
+
+	// var d describer = co
+	// fmt.Println("describer:", d.describe())
+
+	/*Generics*/
+
+	var m = map[int]string{1: "2", 2: "4", 4: "8"}
+
+	fmt.Println("keys:", MapKeys(m))
+
+	_ = MapKeys[int, string](m)
+	lst := List[int]{}
+	lst.Push(10)
+	lst.Push(13)
+	lst.Push(23)
+	fmt.Println("list:", lst.GetAll())
 }
